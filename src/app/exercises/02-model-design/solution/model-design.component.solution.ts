@@ -1,5 +1,5 @@
 import { Component, signal, inject, linkedSignal } from '@angular/core';
-import {form, FormField, required, email, disabled, submit, FormRoot} from '@angular/forms/signals';
+import {form, FormField, required, email, disabled, submit} from '@angular/forms/signals';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { ApiService } from '../../../shared/services/api.service';
 import { User } from '../../../shared/models/api.models';
@@ -55,7 +55,7 @@ function formToDomain(formData: UserFormModel): Partial<User> {
 @Component({
   selector: 'app-model-design',
   standalone: true,
-  imports: [FormField, JsonPipe, FormRoot],
+  imports: [FormField, JsonPipe],
   templateUrl: './model-design.component.solution.html',
   styleUrl: './model-design.component.solution.scss'
 })

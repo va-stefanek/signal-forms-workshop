@@ -60,15 +60,7 @@ interface BookingFormModel {
   selector: 'app-passenger-form',
   standalone: true,
   imports: [FormField],
-  template: `
-    <div class="subform-card">
-      <h4>👤 Passenger Details</h4>
-      <!-- TODO 1a: Add firstName, lastName, email, phone fields -->
-      <!-- Each field should bind to the passenger FieldTree and show validation errors -->
-      <!-- Hint: See the "FieldTree" hint section for binding syntax -->
-      <p class="todo-placeholder">TODO: Implement passenger form fields</p>
-    </div>
-  `
+  templateUrl: './passenger-form.component.html'
 })
 export class PassengerFormComponent {
   // TODO 1b: Declare input with proper FieldTree type instead of any
@@ -83,13 +75,7 @@ export class PassengerFormComponent {
   selector: 'app-flight-form',
   standalone: true,
   imports: [FormField],
-  template: `
-    <div class="subform-card">
-      <h4>✈️ Flight Details</h4>
-      <!-- TODO 2a: Add from, to, date, class fields -->
-      <p class="todo-placeholder">TODO: Implement flight form fields</p>
-    </div>
-  `
+  templateUrl: './flight-form.component.html'
 })
 export class FlightFormComponent {
   // TODO 2b: Declare input with proper FieldTree type instead of any
@@ -104,13 +90,7 @@ export class FlightFormComponent {
   selector: 'app-payment-form',
   standalone: true,
   imports: [FormField],
-  template: `
-    <div class="subform-card">
-      <h4>💳 Payment Details</h4>
-      <!-- TODO 3a: Add cardNumber, expMonth, expYear, cvv fields -->
-      <p class="todo-placeholder">TODO: Implement payment form fields</p>
-    </div>
-  `
+  templateUrl: './payment-form.component.html'
 })
 export class PaymentFormComponent {
   // TODO 3b: Declare input with proper FieldTree type instead of any

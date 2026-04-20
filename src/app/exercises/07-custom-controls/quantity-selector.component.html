@@ -1,0 +1,17 @@
+    <div class="quantity-selector">
+      <button
+        type="button"
+        class="qty-btn minus"
+        [disabled]="currentValue() <= minVal()"
+        (click)="decrement()">
+        −
+      </button>
+      <span class="qty-value">{{ currentValue() }}</span>
+      <button
+        type="button"
+        class="qty-btn plus"
+        [disabled]="currentValue() >= maxVal()"
+        (click)="increment()">
+        +
+      </button>
+    </div>

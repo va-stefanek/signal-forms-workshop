@@ -1,0 +1,175 @@
+    <div class="exercise-container">
+      <header class="exercise-header">
+        <h1>07 - Custom Form Controls</h1>
+        <p class="subtitle">FormValueControl interface - goodbye ControlValueAccessor!</p>
+      </header>
+
+      <div class="alert alert-info">
+        <strong>🎯 Learning Goals:</strong>
+        <ul>
+          <li>Understand <code>FormValueControl&lt;T&gt;</code> interface</li>
+          <li>Create custom controls with <code>model()</code></li>
+          <li>Integrate custom controls with <code>[formField]</code></li>
+          <li>No more ControlValueAccessor boilerplate!</li>
+        </ul>
+      </div>
+
+      <div class="alert alert-warning">
+        <strong>📌 Instructions:</strong>
+        The <code>StarRating</code> and <code>QuantitySelector</code> components already work as standalone UI.
+        Your job: add <code>implements FormValueControl&lt;number&gt;</code> so they work with <code>[formField]</code>.
+      </div>
+
+      <section class="exercise-section">
+        <h3>⭐ Product Review Form</h3>
+
+        <form (submit)="onSubmit()">
+          <div class="form-group">
+            <label for="productName">Product</label>
+            <input
+              id="productName"
+              type="text"
+              class="form-control"
+              [formField]="reviewForm.productName"
+              placeholder="Product name"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Your Rating</label>
+            <!-- TODO 3: Once StarRating implements FormValueControl, uncomment [formField] -->
+            <app-star-rating />
+            <!--<app-star-rating [formField]="reviewForm.rating" />-->
+            @if (reviewForm.rating().touched() && reviewForm.rating().invalid()) {
+              @for (err of reviewForm.rating().errors(); track err.kind) {
+                <div class="field-error">
+                  @switch (err.kind) {
+                    @case ('required') { Please select a rating }
+                    @case ('min') { Please select at least 1 star }
+                  }
+                </div>
+              }
+            }
+          </div>
+
+          <div class="form-group">
+            <label>Quantity Purchased</label>
+            <!-- TODO 4: Once QuantitySelector implements FormValueControl, uncomment [formField] -->
+            <app-quantity-selector />
+            <!--<app-quantity-selector [formField]="reviewForm.quantity" [minVal]="1" [maxVal]="10" />-->
+          </div>
+
+          <div class="form-group">
+            <label for="review">Your Review</label>
+            <textarea
+              id="review"
+              class="form-control"
+              [class.error]="reviewForm.reviewText().touched() && reviewForm.reviewText().invalid()"
+              [formField]="reviewForm.reviewText"
+              placeholder="Write your review..."
+              rows="4">
+            </textarea>
+            @if (reviewForm.reviewText().touched() && reviewForm.reviewText().invalid()) {
+              <div class="field-error">Review must be at least 10 characters</div>
+            }
+            <div class="field-hint">{{ reviewForm.reviewText().value().length }} / 500 characters</div>
+          </div>
+
+          <div class="form-group">
+            <label class="checkbox-wrapper">
+              <input
+                type="checkbox"
+                [checked]="reviewForm.recommend().value()"
+                (change)="toggleRecommend()"
+              />
+              <span>I would recommend this product</span>
+            </label>
+          </div>
+
+          <button type="submit" class="btn btn-primary" [disabled]="reviewForm().invalid()">
+            Submit Review
+          </button>
+        </form>
+      </section>
+
+      <section class="exercise-section">
+        <h3>📊 Review Preview</h3>
+        <div class="review-preview">
+          <div class="preview-rating">
+            @for (star of [1,2,3,4,5]; track star) {
+              <span class="preview-star" [class.filled]="star <= reviewForm.rating().value()">
+                {{ star <= reviewForm.rating().value() ? '★' : '☆' }}
+              </span>
+            }
+          </div>
+          <p class="preview-product">{{ reviewForm.productName().value() || 'Product Name' }}</p>
+          <p class="preview-text">{{ reviewForm.reviewText().value() || 'Your review will appear here...' }}</p>
+          <p class="preview-meta">
+            Quantity: {{ reviewForm.quantity().value() }} |
+            Recommends: {{ reviewForm.recommend().value() ? 'Yes ✅' : 'No' }}
+          </p>
+        </div>
+      </section>
+
+      <section class="exercise-section">
+        <details class="hint-details">
+          <summary class="hint-summary">
+            <span class="hint-icon">💡</span>
+            <span>FormValueControl Interface (click to expand)</span>
+          </summary>
+          <div class="hint-content">
+            <div class="code-block">
+<pre>// The interface is simple:
+interface FormValueControl&lt;T&gt; {{ '{' }}
+  value: ModelSignal&lt;T&gt;;      // REQUIRED
+  disabled?: InputSignal&lt;boolean&gt;;  // optional
+{{ '}' }}
+
+// Implementation:
+@Component({{ '{' }} ... {{ '}' }})
+export class StarRating implements FormValueControl&lt;number&gt; {{ '{' }}
+  value = model&lt;number&gt;(0);     // That's it!
+  disabled = input(false);       // Optional
+{{ '}' }}
+
+// Usage with [formField]:
+&lt;app-star-rating [formField]="form.rating" /&gt;</pre>
+            </div>
+          </div>
+        </details>
+      </section>
+
+      <section class="exercise-section">
+        <details class="hint-details">
+          <summary class="hint-summary">
+            <span class="hint-icon">💡</span>
+            <span>Comparison: CVA vs FormValueControl (click to expand)</span>
+          </summary>
+          <div class="hint-content">
+            <div class="code-block">
+<pre>// ❌ OLD WAY: ControlValueAccessor (50+ lines)
+@Component({{ '{' }}
+  providers: [{{ '{' }}
+    provide: NG_VALUE_ACCESSOR,
+    useExisting: forwardRef(() => MyControl),
+    multi: true
+  {{ '}' }}]
+{{ '}' }})
+export class MyControl implements ControlValueAccessor {{ '{' }}
+  private onChange = () => {{ '{' }}{{ '}' }};
+  private onTouched = () => {{ '{' }}{{ '}' }};
+  writeValue(v) {{ '{' }} ... {{ '}' }}
+  registerOnChange(fn) {{ '{' }} this.onChange = fn; {{ '}' }}
+  registerOnTouched(fn) {{ '{' }} this.onTouched = fn; {{ '}' }}
+  setDisabledState(d) {{ '{' }} ... {{ '}' }}
+{{ '}' }}
+
+// ✅ NEW WAY: FormValueControl (3 lines!)
+export class MyControl implements FormValueControl&lt;T&gt; {{ '{' }}
+  value = model&lt;T&gt;(initialValue);
+{{ '}' }}</pre>
+            </div>
+          </div>
+        </details>
+      </section>
+    </div>

@@ -1,0 +1,18 @@
+    <div class="star-rating">
+      @for (star of stars; track star) {
+        <button
+          type="button"
+          class="star-btn"
+          [class.filled]="star <= (hoveredStar() || currentValue())"
+          [class.hovered]="star <= hoveredStar()"
+          (click)="selectStar(star)"
+          (mouseenter)="hoveredStar.set(star)"
+          (mouseleave)="hoveredStar.set(0)"
+          [attr.aria-label]="'Rate ' + star + ' out of 5'">
+          {{ star <= (hoveredStar() || currentValue()) ? '★' : '☆' }}
+        </button>
+      }
+      @if (currentValue() > 0) {
+        <span class="rating-text">{{ ratingLabels[currentValue() - 1] }}</span>
+      }
+    </div>
