@@ -20,12 +20,18 @@
  * ⏱️ TIME: 10-12 minutes
  *
  * 💡 HINT: Check "FormValueControl Interface" section below!
+ *
+ * 📋 VALIDATION REQUIREMENTS:
+ * - productName: no validation needed
+ * - rating:      must be selected (at least 1 star chosen)
+ * - quantity:    no validation needed (bounds enforced by component UI)
+ * - reviewText:  must be at least 10 characters, no more than 500
+ * - recommend:   no validation needed
  * ================================================================
  */
 
 import { Component, signal, input, model } from '@angular/core';
-import { form, FormField, required, min, max, validate } from '@angular/forms/signals';
-import { FormValueControl } from '@angular/forms/signals';
+import { form, FormField, FormValueControl } from '@angular/forms/signals';
 
 // ============================================
 // StarRatingComponent — UI is ready!
@@ -108,8 +114,7 @@ export class CustomControlsComponent {
     recommend: false
   });
 
-  // TODO 5: Create form with validation
-  // Look at the template to see which fields need validation and what error kinds are expected
+  // TODO 5: Create form with validation (see 📋 VALIDATION REQUIREMENTS at the top of this file)
   protected readonly reviewForm = form(this.reviewModel, (f) => {
     // Add validation here
   });

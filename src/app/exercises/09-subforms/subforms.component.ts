@@ -17,11 +17,18 @@
  * ⏱️ TIME: 12-15 minutes
  *
  * 💡 HINT: FieldTree is the key — pass it as input()!
+ *
+ * 📋 VALIDATION REQUIREMENTS:
+ * - passenger.firstName, passenger.lastName: must not be empty
+ * - passenger.email:                         must be a valid email address
+ * - flight.from, flight.to, flight.date:     must not be empty
+ * - payment.cardNumber, payment.expMonth,
+ *   payment.expYear, payment.cvv:            must not be empty
  * ================================================================
  */
 
 import { Component, signal, input } from '@angular/core';
-import { form, FormField, FieldTree, required, email, minLength, maxLength, schema, apply, submit } from '@angular/forms/signals';
+import { form, FormField } from '@angular/forms/signals';
 import { JsonPipe } from '@angular/common';
 
 // ============================================
@@ -132,10 +139,7 @@ export class SubformsComponent {
     }
   });
 
-  // TODO 4: Create validation for each section
-  // Passenger: firstName and lastName required, email required + valid format
-  // Flight: from, to, and date are required
-  // Payment: cardNumber required, expMonth/expYear required, cvv required
+  // TODO 4: Create validation — see 📋 VALIDATION REQUIREMENTS at the top of this file
   protected readonly bookingForm = form(this.bookingModel, (f) => {
   });
 

@@ -22,12 +22,11 @@
  * ================================================================
  */
 
-import { Component, signal, inject, linkedSignal } from '@angular/core';
-import {form, FormField, required, email, disabled, FormRoot} from '@angular/forms/signals';
+import { Component, signal, inject } from '@angular/core';
+import { form, FormField, required, email, FormRoot } from '@angular/forms/signals';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { ApiService } from '../../shared/services/api.service';
 import { User } from '../../shared/models/api.models';
-import { firstValueFrom } from 'rxjs';
 import { JsonPipe } from '@angular/common';
 
 // ============================================
@@ -88,11 +87,14 @@ export class ModelDesignComponent {
   // TODO 4: Use linkedSignal to derive form model when userResource.value() changes
   protected readonly formModel = signal<UserFormModel>(EMPTY_FORM);
 
-  // TODO 5: Create form with validation
   protected readonly profileForm = form(this.formModel, (f) => {
-    // TODO 5a: displayName and email are required; email must be valid format
+    // ✅ Basic validators already provided
+    required(f.displayName);
+    required(f.email);
+    email(f.email);
 
-    // TODO 5b: Form should be disabled while data is loading from API
+    // TODO 5: Disable the form while the API is loading
+    // Hint: use disabled() with a condition based on userResource
   });
 
   // TODO 6: Submit — transform form data back to domain model and call API

@@ -22,9 +22,8 @@
  */
 
 import { Component, signal, inject } from '@angular/core';
-import { form, FormField, required, email, minLength, debounce, submit, validateHttp } from '@angular/forms/signals';
+import { form, FormField, required, email, minLength } from '@angular/forms/signals';
 import { ApiService } from '../../shared/services/api.service';
-import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-async-submit',
@@ -43,22 +42,26 @@ export class AsyncSubmitComponent {
   protected readonly successMessage = signal<string | null>(null);
   protected readonly errorMessage = signal<string | null>(null);
 
-  // TODO 1: Create form model — look at the template to see which fields are needed
+  // Form model — fields: username (string), email (string), password (string)
   protected readonly regModel = signal({
     username: '',
     email: '',
     password: ''
   });
 
-  // TODO 2: Create form with async validation
   protected readonly regForm = form(this.regModel, (f) => {
-    // TODO 2a: Username — required, min 3 characters, debounced async check
-    // TODO 2b: Username availability — check via API, show "taken" error if unavailable
-    //   API: GET ${this.API_BASE}/api/auth/check-username?username=...
-    //   Response: { available: boolean, suggestions?: string[] }
-    //   Hint: See "Async Validation Pattern" section
-    // TODO 2c: Email — required, valid format
-    // TODO 2d: Password — required, min 8 characters
+    // ✅ Basic validators already provided
+    required(f.username);
+    minLength(f.username, 3);
+    required(f.email);
+    email(f.email);
+    required(f.password);
+    minLength(f.password, 8);
+
+    // TODO 2: Add debounced async username availability check
+    // API: GET ${this.API_BASE}/api/auth/check-username?username=...
+    // Response: { available: boolean, suggestions?: string[] }
+    // Hint: See "Async Validation Pattern" section
   });
 
   useSuggestion(suggestion: string) {

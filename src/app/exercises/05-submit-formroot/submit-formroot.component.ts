@@ -25,7 +25,7 @@
  */
 
 import { Component, signal } from '@angular/core';
-import { form, FormField, FormRoot, required, email, minLength, submit } from '@angular/forms/signals';
+import { form, FormField, FormRoot, required, email, minLength } from '@angular/forms/signals';
 
 interface ContactFormModel {
   name: string;
@@ -54,13 +54,16 @@ export class SubmitFormrootComponent {
     priority: 'medium'
   });
 
-  // TODO 2: Create form with validation schema
-  // Look at the template error messages to see which validators each field needs
   protected readonly contactForm = form(this.contactModel, (f) => {
-    // Add validation here
+    // ✅ Basic validators already provided
+    required(f.name);
+    required(f.email);
+    email(f.email);
+    required(f.subject);
+    minLength(f.message, 10);
   });
 
-  // TODO 3: Implement submit with onInvalid handling
+  // TODO 2: Implement submit with onInvalid handling
   async onSubmit() {
     this.formErrors.set([]);
     this.successMessage.set(null);

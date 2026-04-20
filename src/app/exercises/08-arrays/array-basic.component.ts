@@ -17,11 +17,17 @@
  * ⏱️ TIME: 10-12 minutes
  *
  * 💡 HINT: Check the "applyEach" section below!
+ *
+ * 📋 VALIDATION REQUIREMENTS:
+ * - customerName:  must not be empty
+ * - items[].product:   must not be empty
+ * - items[].quantity:  at least 1
+ * - items[].price:     at least 10
  * ================================================================
  */
 
 import { Component, signal, computed } from '@angular/core';
-import { form, FormField, required, min, applyEach } from '@angular/forms/signals';
+import { form, FormField } from '@angular/forms/signals';
 import { CurrencyPipe } from '@angular/common';
 
 @Component({
@@ -41,9 +47,7 @@ export class ArrayBasicsComponent {
     ]
   });
 
-  // TODO 2: Create form with validation
-  // Customer name is required
-  // Each item: product is required, quantity min 1, price min 10
+  // TODO 2: Create form with validation — see 📋 VALIDATION REQUIREMENTS at the top of this file
   // Hint: See the "applyEach Pattern" section for array validation
   protected readonly orderForm = form(this.orderModel, (f) => {
     // Add validation here

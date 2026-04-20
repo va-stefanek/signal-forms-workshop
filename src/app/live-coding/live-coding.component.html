@@ -1,0 +1,99 @@
+<div class="exercise-container">
+  <header class="exercise-header">
+    <h1>🎤 Live Coding — Validators & Cross-Field Validation</h1>
+    <p class="subtitle">Product form: name + min/max price range</p>
+  </header>
+
+  <section class="exercise-section">
+    <form (submit)="onSubmit()">
+
+      <!-- PRODUCT NAME -->
+      <div class="form-group">
+        <label for="name">Product Name</label>
+        <input
+          id="name"
+          type="text"
+          class="form-control"
+          [class.error]="productForm.name().touched() && productForm.name().invalid()"
+          [formField]="productForm.name"
+          placeholder="e.g. Wireless Headphones"
+        />
+        @if (productForm.name().touched() && productForm.name().invalid()) {
+          @for (err of productForm.name().errors(); track err.kind) {
+            <div class="field-error">
+              @switch (err.kind) {
+                @case ('required') { Product name is required }
+                @case ('minLength') { Name must be at least 3 characters }
+              }
+            </div>
+          }
+        }
+      </div>
+
+      <!-- MIN PRICE -->
+      <div class="form-group">
+        <label for="minPrice">Min Price (€)</label>
+        <input
+          id="minPrice"
+          type="number"
+          class="form-control"
+          [class.error]="productForm.minPrice().touched() && productForm.minPrice().invalid()"
+          [formField]="productForm.minPrice"
+          placeholder="0"
+          step="0.01"
+        />
+        @if (productForm.minPrice().touched() && productForm.minPrice().invalid()) {
+          @for (err of productForm.minPrice().errors(); track err.kind) {
+            <div class="field-error">
+              @switch (err.kind) {
+                @case ('required') { Min price is required }
+                @case ('min') { Min price cannot be negative }
+              }
+            </div>
+          }
+        }
+      </div>
+
+      <!-- MAX PRICE -->
+      <div class="form-group">
+        <label for="maxPrice">Max Price (€)</label>
+        <input
+          id="maxPrice"
+          type="number"
+          class="form-control"
+          [class.error]="productForm.maxPrice().touched() && productForm.maxPrice().invalid()"
+          [formField]="productForm.maxPrice"
+          placeholder="0"
+          step="0.01"
+        />
+        @if (productForm.maxPrice().touched() && productForm.maxPrice().invalid()) {
+          @for (err of productForm.maxPrice().errors(); track err.kind) {
+            <div class="field-error">
+              @switch (err.kind) {
+                @case ('required') { Max price is required }
+                @case ('min') { Max price cannot be negative }
+                @case ('belowMin') { Max price must be greater than min price }
+              }
+            </div>
+          }
+        }
+      </div>
+
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="productForm().invalid()"
+      >
+        Save Product
+      </button>
+
+    </form>
+  </section>
+
+  <section class="exercise-section">
+    <h3>🔍 Form State (Debug)</h3>
+    <div class="code-block">
+      <pre>{{ productForm() | json }}</pre>
+    </div>
+  </section>
+</div>

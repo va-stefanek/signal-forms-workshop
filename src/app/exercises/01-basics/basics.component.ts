@@ -8,34 +8,43 @@
  * - How to bind inputs with [formField]
  * - How to read field state (value, errors, touched, valid)
  *
- * ✅ PART A - DONE WHEN:
- * - The form displays correctly
- * - Email and password validation works
- * - The Login button is disabled when the form is invalid
- * - Data is logged to console on Login click
+ * ================================================================
+ * 📝 YOUR TASKS (in order):
  *
- * ⏱️ PART A TIME: 5-7 minutes
+ *   1. (TODO 2) Create the form schema using form(model, schemaFn)
+ *      - email    → required, must be a valid email address
+ *      - password → required, at least 6 characters
  *
- * ================== BONUS ==================
+ *   2. (TODO 3) Implement formDebugInfo() to show live form state
+ *      - Return a JSON.stringify of the form — explore what properties
+ *        are available on loginForm() and its fields
  *
- * 🎯 PART B - BONUS (5 min):
- * Extend the form with:
- * - Add "username" field with required + minLength(3) validation
- * - Add "rememberMe" field (boolean) with a checkbox
- * - Extend password validation with minLength(6)
+ * ================================================================
+ * 🎯 BONUS — extend the form further:
  *
- * ✅ PART B - DONE WHEN:
- * - Username field validates correctly (min 3 characters)
- * - Remember Me checkbox toggles correctly
- * - Password requires at least 6 characters
- * - All fields are included in the form submission
+ *   3. Add validation for the username field
+ *      - username → required, at least 3 characters
  *
- * 💡 HINT: Check the "Key Concepts" section below!
+ *   4. Extend password validation
+ *      - password → add minLength(6) if not already there
+ *
+ * ================================================================
+ * ✅ DONE WHEN:
+ *   - Typing an invalid email and blurring the field shows an error
+ *   - Typing a password shorter than 6 chars and blurring shows an error
+ *   - Login button is disabled until both email and password are valid
+ *   - Clicking Login logs the form data to the console
+ *   - Debug panel below the form shows live field state
+ *
+ * ⏱️ TIME: 12-15 min  |  Bonus: +8-10 min
+ *
+ * 💡 STUCK? Check the "Key Concepts" hint section at the bottom of
+ *    the template
  * ================================================================
  */
 
 import { Component, signal } from '@angular/core';
-import { form, FormField, required, email, minLength } from '@angular/forms/signals';
+import {form, FormField, required, validate} from '@angular/forms/signals';
 
 @Component({
   selector: 'app-basics',
@@ -55,10 +64,10 @@ export class BasicsComponent {
   });
 
   // TODO 2: Create form with validation using form(model, schemaFn)
-  // Look at the template to understand which fields need validation and what error kinds are expected
-  // PART B BONUS: add validation for the bonus fields too
+  // See 📋 VALIDATION REQUIREMENTS at the top of this file
   protected readonly loginForm = form(this.loginModel, (f) => {
     // Add validation here
+    required(f.username)
   });
 
   // TODO 3: Return a debug string showing the current form state

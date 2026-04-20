@@ -55,6 +55,12 @@ export const routes: Routes = [
     loadComponent: () => import('./exercises/09-subforms/subforms.component').then(m => m.SubformsComponent),
     title: 'Signal Forms - Subforms'
   },
+  // Live coding demo — presenter only
+  {
+    path: 'live-coding',
+    loadComponent: () => import('./live-coding/live-coding.component').then(m => m.LiveCodingComponent),
+    title: 'Signal Forms - Live Coding'
+  },
   {
     path: '**',
     redirectTo: '/01-basics'

@@ -7,10 +7,15 @@
  * - How to implement cross-field validation (password confirmation)
  * - How to understand automatic dependency tracking
  *
+ * 📋 VALIDATION REQUIREMENTS:
+ * - username:        at least 3 characters
+ * - email:           must be a valid email address
+ * - password:        at least 8 characters
+ * - confirmPassword: must match the password field (cross-field validation)
+ *
  * ✅ DONE WHEN:
- * - Username is required (min 3 characters)
- * - Password requires min 8 characters
- * - confirmPassword checks match with password
+ * - All four fields validate correctly
+ * - Passwords-don't-match error shows when confirmPassword differs
  * - All errors display properly
  *
  * ⏱️ TIME: 8-10 minutes
@@ -18,7 +23,16 @@
  */
 
 import { Component, signal } from '@angular/core';
-import { form, FormField, required, email, minLength, maxLength, validate, REQUIRED, MIN_LENGTH, MAX_LENGTH } from '@angular/forms/signals';
+import {
+  form,
+  FormField,
+  REQUIRED,
+  MIN_LENGTH,
+  MAX_LENGTH,
+  maxLength,
+  minLength,
+  required
+} from '@angular/forms/signals';
 
 @Component({
   selector: 'app-validation',
@@ -36,11 +50,7 @@ export class ValidationComponent {
     confirmPassword: ''
   });
 
-  // TODO 1: Add validation for each field
-  // Username: required, min 3 characters
-  // Email: required, must be valid email format
-  // Password: required, min 8 characters
-  // Confirm password: required, must match password (cross-field validation)
+  // TODO 1: Add validation — see 📋 VALIDATION REQUIREMENTS at the top of this file
   protected readonly regForm = form(this.regModel, (f) => {
     // Add validation here
   });

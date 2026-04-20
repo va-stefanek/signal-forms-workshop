@@ -18,17 +18,20 @@
  * ⏱️ TIME: 12-15 minutes
  *
  * 💡 HINT: Check the "Schema Definition" and "applyWhen" sections!
+ *
+ * 📋 VALIDATION REQUIREMENTS:
+ * - contact.email:              must be a valid email address
+ * - contact.phone:              exactly 9 digits
+ * - shippingAddress (all fields): required — but ONLY when delivery type is "shipping"
+ * - companyName:                required — but ONLY when customer type is "business"
+ * - taxId:                      required — but ONLY when customer type is "business"
  * ================================================================
  */
 
-import { Component, signal, computed } from '@angular/core';
-import { form, FormField, required, email, minLength, pattern, schema, apply, applyWhen } from '@angular/forms/signals';
+import { Component, signal } from '@angular/core';
+import {form, FormField, schema} from '@angular/forms/signals';
 
-// TODO 1a: Create reusable addressSchema
-// Street is required
-// City is required
-// Postal code is required
-// Country is required
+// TODO 1a: Create reusable addressSchema — see 📋 VALIDATION REQUIREMENTS above
 const addressSchema = schema<{
   street: string;
   city: string;
@@ -38,9 +41,7 @@ const addressSchema = schema<{
   // Add validation here
 });
 
-// TODO 1b: Create contactSchema
-// Email is required and must have correct format
-// Phone must have 9 digits
+// TODO 1b: Create contactSchema — see 📋 VALIDATION REQUIREMENTS above
 const contactSchema = schema<{
   email: string;
   phone: string;
