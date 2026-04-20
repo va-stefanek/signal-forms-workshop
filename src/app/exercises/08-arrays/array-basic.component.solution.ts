@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, computed } from '@angular/core';
 import { form, FormField, required, min, applyEach } from '@angular/forms/signals';
 import { CurrencyPipe } from '@angular/common';
 
@@ -236,13 +236,12 @@ export class ArrayBasicsComponent {
     }));
   }
 
-  // Calculate total
-  calculateTotal(): number {
-    return this.orderModel().items.reduce(
+  protected readonly calculateTotal = computed(() =>
+    this.orderModel().items.reduce(
       (sum, item) => sum + (item.quantity * item.price),
       0
-    );
-  }
+    )
+  );
 
   // Debug info
   protected formDebugInfo = () => {

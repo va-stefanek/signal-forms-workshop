@@ -132,14 +132,14 @@ export class SubformsComponent {
     }
   });
 
-  // TODO 5: Create validation for each section
+  // TODO 4: Create validation for each section
   // Passenger: firstName and lastName required, email required + valid format
   // Flight: from, to, and date are required
   // Payment: cardNumber required, expMonth/expYear required, cvv required
   protected readonly bookingForm = form(this.bookingModel, (f) => {
   });
 
-  // TODO 6: Use submit() — simulate API call, show success message with passenger name and route
+  // TODO 5: Use submit() — simulate API call, show success message with passenger name and route
   async onSubmit() {
     this.successMessage.set(null);
   }

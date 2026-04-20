@@ -20,7 +20,7 @@
  * ================================================================
  */
 
-import { Component, signal } from '@angular/core';
+import { Component, signal, computed } from '@angular/core';
 import { form, FormField, required, min, applyEach } from '@angular/forms/signals';
 import { CurrencyPipe } from '@angular/common';
 
@@ -57,10 +57,8 @@ export class ArrayBasicsComponent {
   removeItem(index: number) {
   }
 
-  // TODO 5: Calculate order total from model data, change it to computed
-  calculateTotal(): number {
-    return 0;
-  }
+  // TODO 5: Replace with a computed() signal that sums quantity * price across all items
+  protected readonly calculateTotal = computed(() => 0);
 
   // Debug info
   protected formDebugInfo = () => {
