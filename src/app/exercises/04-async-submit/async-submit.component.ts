@@ -8,6 +8,15 @@
  * - How to handle pending() state in UI
  * - How to use submit() with server error mapping
  *
+ * 📝 YOUR TASKS (in order):
+ *
+ *   1. (TODO 2 — TS) Add debounced async username availability check:
+ *      call GET /api/auth/check-username, show suggestions when taken
+ *
+ *   2. (TODO 3 — TS) Implement onSubmit() with server error handling:
+ *      call API, show success or map server errors back to form fields
+ *
+ * ================================================================
  * ✅ DONE WHEN:
  * - Username checked asynchronously (with debounce)
  * - Pending/success/error icons display correctly

@@ -13,6 +13,13 @@
  * - password:        at least 8 characters
  * - confirmPassword: must match the password field (cross-field validation)
  *
+ * 📝 YOUR TASKS (in order):
+ *
+ *   1. (TODO 1 — TS) Add validators to regForm:
+ *      - built-in validators for username, email, password
+ *      - cross-field validate() for confirmPassword (must match password)
+ *
+ * ================================================================
  * ✅ DONE WHEN:
  * - All four fields validate correctly
  * - Passwords-don't-match error shows when confirmPassword differs

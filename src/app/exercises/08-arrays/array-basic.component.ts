@@ -7,6 +7,21 @@
  * - Validate each item with applyEach()
  * - Add/remove items with immutable updates
  *
+ * 📝 YOUR TASKS (in order):
+ *
+ *   1. (TODO 2 — TS) Add validators to orderForm using applyEach()
+ *      for items array (see 📋 VALIDATION REQUIREMENTS)
+ *
+ *   2. (TODO 3 — TS) Implement addItem(): append a blank item
+ *      to orderModel using an immutable update
+ *
+ *   3. (TODO 4 — TS) Implement removeItem(index): remove the item
+ *      at given index using an immutable update
+ *
+ *   4. (TODO 5 — TS) Replace calculateTotal with computed() that
+ *      sums quantity × price across all items
+ *
+ * ================================================================
  * ✅ DONE WHEN:
  * - Customer name is validated
  * - Items can be added and removed
@@ -38,8 +53,7 @@ import { CurrencyPipe } from '@angular/common';
   styleUrl: './array-basic.component.scss'
 })
 export class ArrayBasicsComponent {
-  // TODO 1: Create form model with an items array
-  // Each item needs: id (for tracking), product, quantity, price
+  // ✅ Already provided: form model with items array
   protected readonly orderModel = signal({
     customerName: '',
     items: [

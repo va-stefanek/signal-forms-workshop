@@ -11,6 +11,18 @@
  * The UI components (StarRating, QuantitySelector) are ALREADY BUILT.
  * Your job: make them work with Signal Forms by implementing FormValueControl<T>.
  *
+ * 📝 YOUR TASKS (in order):
+ *
+ *   1. (TODO 1 — TS) Make StarRatingComponent implement FormValueControl<number>:
+ *      replace plain signal with model() input, add value/onChange bindings
+ *
+ *   2. (TODO 2 — TS) Make QuantitySelectorComponent implement FormValueControl<number>:
+ *      same as above — replace plain signal with model() input
+ *
+ *   3. (TODO 5 — TS) Add validators to reviewForm
+ *      (see 📋 VALIDATION REQUIREMENTS at the top of this file)
+ *
+ * ================================================================
  * ✅ DONE WHEN:
  * - StarRating component works with [formField]
  * - QuantitySelector component works with [formField]

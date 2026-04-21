@@ -8,6 +8,22 @@
  * - Validation stays in parent schema, UI in children
  * - schema() for reusable validation of each section
  *
+ * 📝 YOUR TASKS (in order):
+ *
+ *   1. (TODO 1b — TS) Declare PassengerFormComponent input with correct
+ *      FieldTree<BookingFormModel['passenger']> type instead of any
+ *
+ *   2. (TODO 2b — TS) Same for FlightFormComponent input
+ *
+ *   3. (TODO 3b — TS) Same for PaymentFormComponent input
+ *
+ *   4. (TODO 4 — TS) Add validators to bookingForm
+ *      (see 📋 VALIDATION REQUIREMENTS at the top of this file)
+ *
+ *   5. (TODO 5 — TS) Implement onSubmit(): simulate API call,
+ *      show success message with passenger name and route
+ *
+ * ================================================================
  * ✅ DONE WHEN:
  * - 3 child components render their form sections
  * - All fields bind to the parent form state

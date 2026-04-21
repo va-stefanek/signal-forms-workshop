@@ -9,6 +9,23 @@
  * - disabled() validator while loading
  * - Form ↔ domain model separation concept
  *
+ * 📝 YOUR TASKS (in order):
+ *
+ *   1. (TODO 1 — TS) Implement domainToForm(): map User.name → displayName,
+ *      flatten User.address fields, default missing values to ''
+ *
+ *   2. (TODO 2 — TS) Implement formToDomain(): map displayName → name,
+ *      re-nest street/city/postalCode into an address object
+ *
+ *   3. (TODO 4 — TS) Replace signal(EMPTY_FORM) with linkedSignal()
+ *      so formModel auto-updates when userResource.value() changes
+ *
+ *   4. (TODO 5 — TS) Add disabled() validator while userResource is loading
+ *
+ *   5. (TODO 6 — TS) Implement onSubmit(): convert form → domain model,
+ *      call API, show success or error message
+ *
+ * ================================================================
  * ✅ DONE WHEN:
  * - User data loads from API into form fields
  * - Domain model transforms to form model (flat fields)
@@ -17,8 +34,6 @@
  * - Successful save shows confirmation
  *
  * ⏱️ TIME: 12-15 minutes
- *
- * 💡 HINT: Think about WHY domain and form models differ!
  * ================================================================
  */
 
@@ -79,7 +94,7 @@ export class ModelDesignComponent {
   protected readonly successMessage = signal<string | null>(null);
   protected readonly errorMessage = signal<string | null>(null);
 
-  // TODO 3: Load user from API using rxResource
+  // ✅ Already provided: loads user from API
   protected readonly userResource = rxResource({
     stream: () => this.api.getUser('demo')
   });

@@ -8,6 +8,23 @@
  * - How to use conditional validation with applyWhen()
  * - DRY principle - define once, use everywhere
  *
+ * 📝 YOUR TASKS (in order):
+ *
+ *   1. (TODO 1a — TS) Create addressSchema with required validators
+ *      for street, city, postalCode, country
+ *
+ *   2. (TODO 1b — TS) Create contactSchema with validators
+ *      for email and phone (see 📋 VALIDATION REQUIREMENTS)
+ *
+ *   3. (TODO 3a — TS) Apply contactSchema inside orderForm
+ *
+ *   4. (TODO 3b — TS) Use applyWhen() so company fields are required
+ *      only when customerType === 'business'
+ *
+ *   5. (TODO 3c — TS) Use applyWhen() to apply addressSchema
+ *      only when deliveryType === 'shipping'
+ *
+ * ================================================================
  * ✅ DONE WHEN:
  * - addressSchema works for shipping address
  * - contactSchema validates email and phone
@@ -57,7 +74,7 @@ const contactSchema = schema<{
   styleUrl: './schemas.component.scss'
 })
 export class SchemasComponent {
-  // TODO 2: Create form model
+  // ✅ Already provided: form model
   protected readonly orderModel = signal({
     customerType: 'personal' as 'personal' | 'business',
     companyName: '',
