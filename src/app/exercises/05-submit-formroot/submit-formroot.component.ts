@@ -3,29 +3,53 @@
  * 🎯 EXERCISE GOAL: Submit & FormRoot
  * ================================================================
  * You will learn:
- * - submit() with options: action, onInvalid, ignoreValidators
- * - errorSummary() to collect all errors
- * - focusBoundControl() to auto-focus first invalid field
- * - FormRoot directive (declarative submit)
- * - submitting() state for loading UI
- * - reset() after successful submit
+ * - submit() with action + onInvalid callbacks
+ * - errorSummary() + focusBoundControl() for UX
+ * - submitting() loading state
+ * - form() 3rd argument for declarative submission
+ * - [formRoot] directive — no onSubmit() method needed
  *
+ * ================================================================
+ * 📋 VALIDATION REQUIREMENTS (both forms use the same rules):
+ * - name:    must not be empty
+ * - email:   must be a valid email address
+ * - subject: must not be empty
+ * - message: at least 10 characters
+ *
+ * ================================================================
+ * 📝 YOUR TASKS (in order):
+ *
+ *   PART A — imperative submit()
+ *
+ *   1. (TODO 1 — TS) Implement onSubmitA() using submit():
+ *      - action:    simulate 1500ms API call, set successA, reset model + field state
+ *      - onInvalid: focus first invalid field via errorSummary()
+ *
+ *   PART B — declarative [formRoot]
+ *
+ *   2. (TODO 2 — TS) Add 3rd argument to formB's form() call:
+ *      { submission: { action: ..., onInvalid: ... } }
+ *      (same logic as Part A — now lives inside the form definition)
+ *
+ *   3. (TODO 3 — HTML) Change (submit)="noop($event)" → [formRoot]="formB"
+ *      Also add FormRoot to the imports array in this file.
+ *
+ * ================================================================
  * ✅ DONE WHEN:
- * - Contact form validates all fields
- * - Invalid submit shows error summary at top
- * - First invalid field gets auto-focused
- * - FormRoot directive handles submit declaratively
- * - Loading spinner shows during submission
- * - Form resets after successful submit
+ *   Part A:
+ *   - Submitting invalid form focuses the first error field
+ *   - Submitting valid form: spinner → success message → form clears
+ *   Part B:
+ *   - Identical behavior — but no onSubmit method, only [formRoot]
  *
- * ⏱️ TIME: 10-12 minutes
+ * ⏱️ TIME: 18-22 min
  *
- * 💡 HINT: Check the "submit() options" and "FormRoot" sections!
+ * 💡 STUCK? Check hint sections at the bottom of the template
  * ================================================================
  */
 
 import { Component, signal } from '@angular/core';
-import { form, FormField, FormRoot, required, email, minLength } from '@angular/forms/signals';
+import { form, FormField, FormRoot, required, email, minLength, submit } from '@angular/forms/signals';
 
 interface ContactFormModel {
   name: string;
@@ -35,26 +59,27 @@ interface ContactFormModel {
   priority: 'low' | 'medium' | 'high';
 }
 
+const INITIAL: ContactFormModel = {
+  name: '',
+  email: '',
+  subject: '',
+  message: '',
+  priority: 'medium'
+};
+
 @Component({
   selector: 'app-submit-formroot',
   standalone: true,
-  imports: [FormField, FormRoot],
+  imports: [FormField],
   templateUrl: './submit-formroot.component.html',
   styleUrl: './submit-formroot.component.scss'
 })
 export class SubmitFormrootComponent {
-  protected readonly formErrors = signal<any[]>([]);
-  protected readonly successMessage = signal<string | null>(null);
 
-  protected readonly contactModel = signal<ContactFormModel>({
-    name: '',
-    email: '',
-    subject: '',
-    message: '',
-    priority: 'medium'
-  });
+  // ── PART A: imperative submit() ──────────────────────────────
+  protected readonly modelA = signal<ContactFormModel>({ ...INITIAL });
 
-  protected readonly contactForm = form(this.contactModel, (f) => {
+  protected readonly formA = form(this.modelA, (f) => {
     // ✅ Basic validators already provided
     required(f.name);
     required(f.email);
@@ -63,15 +88,30 @@ export class SubmitFormrootComponent {
     minLength(f.message, 10);
   });
 
-  // TODO 2: Implement submit with onInvalid handling
-  async onSubmit() {
-    this.formErrors.set([]);
-    this.successMessage.set(null);
+  protected readonly successA = signal<string | null>(null);
 
-    // TODO 3: Handle form submission
-    // - If valid: simulate API call (setTimeout), show success, reset form
-    //  await new Promise(resolve => setTimeout(resolve, 1500));
-    // - If invalid: collect all field errors and set formErrors signal
-    // Hint: See the "submit() options" hint section
+  // TODO 2: Implement using submit(this.formA, { action, onInvalid })
+  // action:    await 1500ms, set successA, reset modelA + call field().reset()
+  // onInvalid: field().errorSummary()[0]?.fieldTree().focusBoundControl()
+  async onSubmitA() {
+    this.successA.set(null);
   }
+
+  // ── PART B: declarative [formRoot] ───────────────────────────
+  protected readonly modelB = signal<ContactFormModel>({ ...INITIAL });
+
+  // TODO 3: Add 3rd argument { submission: { action, onInvalid } }
+  // Same logic as Part A — but declared here, not in a separate method
+  protected readonly formB = form(this.modelB, (f) => {
+    // ✅ Basic validators already provided
+    required(f.name);
+    required(f.email);
+    email(f.email);
+    required(f.subject);
+    minLength(f.message, 10);
+  });
+
+  protected readonly successB = signal<string | null>(null);
+
+  protected noop(event: Event) { event.preventDefault(); }
 }

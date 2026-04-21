@@ -1,210 +1,279 @@
 <div class="exercise-container">
   <header class="exercise-header">
     <h1>05 - Submit & FormRoot</h1>
-    <p class="subtitle">Advanced submit(), error summary, FormRoot directive</p>
+    <p class="subtitle">Two ways to handle submission: submit() vs [formRoot]</p>
   </header>
 
   <div class="alert alert-info">
     <strong>🎯 Learning Goals:</strong>
     <ul>
-      <li>Use <code>submit()</code> with options object</li>
-      <li>Collect errors with <code>errorSummary()</code></li>
-      <li>Auto-focus invalid fields with <code>focusBoundControl()</code></li>
-      <li>Use <code>[formRoot]</code> for declarative submit</li>
+      <li>Use <code>submit()</code> with <code>action</code> + <code>onInvalid</code></li>
+      <li>Auto-focus invalid fields with <code>errorSummary()</code> + <code>focusBoundControl()</code></li>
       <li>Show <code>submitting()</code> loading state</li>
-      <li>Use <code>reset()</code> after success</li>
+      <li>Declare submission inside <code>form()</code> 3rd argument</li>
+      <li>Use <code>[formRoot]</code> — no <code>onSubmit()</code> method needed</li>
     </ul>
   </div>
 
-  @if (formErrors().length > 0) {
-    <div class="alert alert-error">
-      <strong>❌ Please fix the following errors:</strong>
-      <ul>
-        @for (err of formErrors(); track $index) {
-          <li>{{ err.message || err.kind }}</li>
-        }
-      </ul>
-    </div>
-  }
+  <div class="parts-grid">
 
-  @if (successMessage()) {
-    <div class="alert alert-success">
-      <strong>🎉 Success!</strong> {{ successMessage() }}
-    </div>
-  }
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- PART A — imperative submit()               -->
+    <!-- ═══════════════════════════════════════════ -->
+    <section class="exercise-section">
+      <h3>Part A — <code>submit()</code> imperative</h3>
+      <p class="part-desc">Submission logic lives in an <code>onSubmit()</code> method.</p>
 
-  <section class="exercise-section">
-    <h3>📝 Contact Form</h3>
+      @if (successA()) {
+        <div class="alert alert-success">
+          <strong>✅</strong> {{ successA() }}
+        </div>
+      }
 
-    <!-- TODO 1: Replace manual (submit) with the [formRoot] directive -->
-    <!-- See the "FormRoot" hint section for the syntax -->
-    <form (submit)="onSubmit()">
-      <div class="form-group">
-        <label for="name">Name</label>
-        <input
-          id="name"
-          type="text"
-          class="form-control"
-          [class.error]="contactForm.name().touched() && contactForm.name().invalid()"
-          [formField]="contactForm.name"
-          placeholder="Your name"
-        />
-        @if (contactForm.name().touched() && contactForm.name().invalid()) {
-          @for (err of contactForm.name().errors(); track err.kind) {
-            <div class="field-error">
-              @switch (err.kind) {
-                @case ('required') { Name is required }
-                @default { {{ err.message || 'Invalid' }} }
-              }
-            </div>
+      <form (submit)="onSubmitA()">
+        <div class="form-group">
+          <label for="nameA">Name</label>
+          <input id="nameA" type="text" class="form-control"
+            [class.error]="formA.name().touched() && formA.name().invalid()"
+            [formField]="formA.name" placeholder="Your name" />
+          @if (formA.name().touched() && formA.name().invalid()) {
+            @for (err of formA.name().errors(); track err.kind) {
+              <div class="field-error">
+                @switch (err.kind) {
+                  @case ('required') { Name is required }
+                  @default { {{ err.message || 'Invalid' }} }
+                }
+              </div>
+            }
           }
-        }
-      </div>
+        </div>
 
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input
-          id="email"
-          type="email"
-          class="form-control"
-          [class.error]="contactForm.email().touched() && contactForm.email().invalid()"
-          [formField]="contactForm.email"
-          placeholder="your@email.com"
-        />
-        @if (contactForm.email().touched() && contactForm.email().invalid()) {
-          @for (err of contactForm.email().errors(); track err.kind) {
-            <div class="field-error">
-              @switch (err.kind) {
-                @case ('required') { Email is required }
-                @case ('email') { Please enter a valid email }
-                @default { {{ err.message || 'Invalid' }} }
-              }
-            </div>
+        <div class="form-group">
+          <label for="emailA">Email</label>
+          <input id="emailA" type="email" class="form-control"
+            [class.error]="formA.email().touched() && formA.email().invalid()"
+            [formField]="formA.email" placeholder="your@email.com" />
+          @if (formA.email().touched() && formA.email().invalid()) {
+            @for (err of formA.email().errors(); track err.kind) {
+              <div class="field-error">
+                @switch (err.kind) {
+                  @case ('required') { Email is required }
+                  @case ('email') { Please enter a valid email }
+                  @default { {{ err.message || 'Invalid' }} }
+                }
+              </div>
+            }
           }
-        }
-      </div>
+        </div>
 
-      <div class="form-group">
-        <label for="subject">Subject</label>
-        <input
-          id="subject"
-          type="text"
-          class="form-control"
-          [class.error]="contactForm.subject().touched() && contactForm.subject().invalid()"
-          [formField]="contactForm.subject"
-          placeholder="What is this about?"
-        />
-        @if (contactForm.subject().touched() && contactForm.subject().invalid()) {
-          @for (err of contactForm.subject().errors(); track err.kind) {
-            <div class="field-error">
-              @switch (err.kind) {
-                @case ('required') { Subject is required }
-                @case ('minLength') { Subject must be at least 5 characters }
-                @default { {{ err.message || 'Invalid' }} }
-              }
-            </div>
+        <div class="form-group">
+          <label for="subjectA">Subject</label>
+          <input id="subjectA" type="text" class="form-control"
+            [class.error]="formA.subject().touched() && formA.subject().invalid()"
+            [formField]="formA.subject" placeholder="What is this about?" />
+          @if (formA.subject().touched() && formA.subject().invalid()) {
+            @for (err of formA.subject().errors(); track err.kind) {
+              <div class="field-error">
+                @switch (err.kind) {
+                  @case ('required') { Subject is required }
+                  @default { {{ err.message || 'Invalid' }} }
+                }
+              </div>
+            }
           }
-        }
-      </div>
+        </div>
 
-      <div class="form-group">
-        <label for="message">Message</label>
-        <textarea
-          id="message"
-          class="form-control"
-          rows="4"
-          [class.error]="contactForm.message().touched() && contactForm.message().invalid()"
-          [formField]="contactForm.message"
-          placeholder="Your message..."
-        ></textarea>
-        @if (contactForm.message().touched() && contactForm.message().invalid()) {
-          @for (err of contactForm.message().errors(); track err.kind) {
-            <div class="field-error">
-              @switch (err.kind) {
-                @case ('required') { Message is required }
-                @case ('minLength') { Message must be at least 20 characters }
-                @default { {{ err.message || 'Invalid' }} }
-              }
-            </div>
+        <div class="form-group">
+          <label for="messageA">Message</label>
+          <textarea id="messageA" class="form-control" rows="3"
+            [class.error]="formA.message().touched() && formA.message().invalid()"
+            [formField]="formA.message" placeholder="Your message..."></textarea>
+          @if (formA.message().touched() && formA.message().invalid()) {
+            @for (err of formA.message().errors(); track err.kind) {
+              <div class="field-error">
+                @switch (err.kind) {
+                  @case ('required') { Message is required }
+                  @case ('minLength') { Message must be at least 10 characters }
+                  @default { {{ err.message || 'Invalid' }} }
+                }
+              </div>
+            }
           }
-        }
-      </div>
+        </div>
 
-      <div class="form-group">
-        <label for="priority">Priority</label>
-        <select
-          id="priority"
-          class="form-control"
-          [formField]="contactForm.priority"
-        >
-          <option value="low">Low</option>
-          <option value="medium">Medium</option>
-          <option value="high">High</option>
-        </select>
-      </div>
+        <div class="form-group">
+          <label for="priorityA">Priority</label>
+          <select id="priorityA" class="form-control" [formField]="formA.priority">
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+          </select>
+        </div>
 
-      <button
-        type="submit"
-        class="btn btn-primary"
-        [disabled]="contactForm().submitting()">
-        @if (contactForm().submitting()) {
-          <span class="loading-spinner"></span>
-          Sending...
-        } @else {
-          Send Message
-        }
-      </button>
-    </form>
-  </section>
+        <button type="submit" class="btn btn-primary" [disabled]="formA().submitting()">
+          @if (formA().submitting()) {
+            <span class="loading-spinner"></span> Sending...
+          } @else {
+            Send (Part A)
+          }
+        </button>
+      </form>
 
-  <section class="exercise-section">
-    <h3>🔍 Form State</h3>
-    <div class="state-grid">
-      <div class="state-item">
-        <span class="label">Valid</span>
-        <span class="value" [class.yes]="contactForm().valid()">{{ contactForm().valid() ? 'Yes' : 'No' }}</span>
+      <div class="state-grid" style="margin-top:1rem">
+        <div class="state-item">
+          <span class="label">Valid</span>
+          <span class="value" [class.yes]="formA().valid()">{{ formA().valid() ? 'Yes' : 'No' }}</span>
+        </div>
+        <div class="state-item">
+          <span class="label">Submitting</span>
+          <span class="value" [class.yes]="formA().submitting()">{{ formA().submitting() ? 'Yes' : 'No' }}</span>
+        </div>
       </div>
-      <div class="state-item">
-        <span class="label">Touched</span>
-        <span class="value" [class.yes]="contactForm().touched()">{{ contactForm().touched() ? 'Yes' : 'No' }}</span>
+    </section>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- PART B — declarative [formRoot]            -->
+    <!-- ═══════════════════════════════════════════ -->
+    <section class="exercise-section">
+      <h3>Part B — <code>[formRoot]</code> declarative</h3>
+      <p class="part-desc">Submission logic lives inside <code>form()</code>. No method needed.</p>
+
+      @if (successB()) {
+        <div class="alert alert-success">
+          <strong>✅</strong> {{ successB() }}
+        </div>
+      }
+
+      <!-- TODO 4: replace (submit)="noop($event)" with [formRoot]="formB"
+           (also add FormRoot to imports array in .ts) -->
+      <form (submit)="noop($event)">
+        <div class="form-group">
+          <label for="nameB">Name</label>
+          <input id="nameB" type="text" class="form-control"
+            [class.error]="formB.name().touched() && formB.name().invalid()"
+            [formField]="formB.name" placeholder="Your name" />
+          @if (formB.name().touched() && formB.name().invalid()) {
+            @for (err of formB.name().errors(); track err.kind) {
+              <div class="field-error">
+                @switch (err.kind) {
+                  @case ('required') { Name is required }
+                  @default { {{ err.message || 'Invalid' }} }
+                }
+              </div>
+            }
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="emailB">Email</label>
+          <input id="emailB" type="email" class="form-control"
+            [class.error]="formB.email().touched() && formB.email().invalid()"
+            [formField]="formB.email" placeholder="your@email.com" />
+          @if (formB.email().touched() && formB.email().invalid()) {
+            @for (err of formB.email().errors(); track err.kind) {
+              <div class="field-error">
+                @switch (err.kind) {
+                  @case ('required') { Email is required }
+                  @case ('email') { Please enter a valid email }
+                  @default { {{ err.message || 'Invalid' }} }
+                }
+              </div>
+            }
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="subjectB">Subject</label>
+          <input id="subjectB" type="text" class="form-control"
+            [class.error]="formB.subject().touched() && formB.subject().invalid()"
+            [formField]="formB.subject" placeholder="What is this about?" />
+          @if (formB.subject().touched() && formB.subject().invalid()) {
+            @for (err of formB.subject().errors(); track err.kind) {
+              <div class="field-error">
+                @switch (err.kind) {
+                  @case ('required') { Subject is required }
+                  @default { {{ err.message || 'Invalid' }} }
+                }
+              </div>
+            }
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="messageB">Message</label>
+          <textarea id="messageB" class="form-control" rows="3"
+            [class.error]="formB.message().touched() && formB.message().invalid()"
+            [formField]="formB.message" placeholder="Your message..."></textarea>
+          @if (formB.message().touched() && formB.message().invalid()) {
+            @for (err of formB.message().errors(); track err.kind) {
+              <div class="field-error">
+                @switch (err.kind) {
+                  @case ('required') { Message is required }
+                  @case ('minLength') { Message must be at least 10 characters }
+                  @default { {{ err.message || 'Invalid' }} }
+                }
+              </div>
+            }
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="priorityB">Priority</label>
+          <select id="priorityB" class="form-control" [formField]="formB.priority">
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary" [disabled]="formB().submitting()">
+          @if (formB().submitting()) {
+            <span class="loading-spinner"></span> Sending...
+          } @else {
+            Send (Part B)
+          }
+        </button>
+      </form>
+
+      <div class="state-grid" style="margin-top:1rem">
+        <div class="state-item">
+          <span class="label">Valid</span>
+          <span class="value" [class.yes]="formB().valid()">{{ formB().valid() ? 'Yes' : 'No' }}</span>
+        </div>
+        <div class="state-item">
+          <span class="label">Submitting</span>
+          <span class="value" [class.yes]="formB().submitting()">{{ formB().submitting() ? 'Yes' : 'No' }}</span>
+        </div>
       </div>
-      <div class="state-item">
-        <span class="label">Submitting</span>
-        <span class="value" [class.yes]="contactForm().submitting()">{{ contactForm().submitting() ? 'Yes' : 'No' }}</span>
-      </div>
-      <div class="state-item">
-        <span class="label">Dirty</span>
-        <span class="value" [class.yes]="contactForm().dirty()">{{ contactForm().dirty() ? 'Yes' : 'No' }}</span>
-      </div>
-    </div>
-  </section>
+    </section>
+
+  </div><!-- /parts-grid -->
+
+  <!-- ── HINTS ──────────────────────────────────────────────────── -->
 
   <section class="exercise-section">
     <details class="hint-details">
       <summary class="hint-summary">
         <span class="hint-icon">💡</span>
-        <span>submit() with onInvalid + errorSummary (click to expand)</span>
+        <span>Part A — submit() pattern (click to expand)</span>
       </summary>
       <div class="hint-content">
-        <pre class="code-block">// submit() handles validation before running action
-await submit(this.contactForm, &#123;
-  action: async (formTree) =&gt; &#123;
-    // Only runs if form is valid
-    await sendToApi(formTree().value());
-    // Reset model to clear form
-    this.contactModel.set(&#123; ...initialValues &#125;);
-    return null;
-  &#125;,
-  onInvalid: (formTree) =&gt; &#123;
-    // Collect errors from fields
-    const errors = [];
-    for (const field of ['name', 'email']) &#123;
-      if (formTree[field]().invalid())
-        errors.push(...formTree[field]().errors());
+        <pre class="code-block">async onSubmitA() &#123;
+  this.successA.set(null);
+
+  await submit(this.formA, &#123;
+    action: async (field) =&gt; &#123;
+      await new Promise(r =&gt; setTimeout(r, 1500));
+      this.successA.set('Sent!');
+      this.modelA.set(&#123; ...INITIAL &#125;);  // reset data
+      field().reset();                  // reset touched/dirty
+      return undefined;                 // success
+    &#125;,
+    onInvalid: (field) =&gt; &#123;
+      field().errorSummary()[0]?.fieldTree().focusBoundControl();
     &#125;
-    this.formErrors.set(errors);
-  &#125;
-&#125;);</pre>
+  &#125;);
+&#125;</pre>
       </div>
     </details>
   </section>
@@ -213,21 +282,32 @@ await submit(this.contactForm, &#123;
     <details class="hint-details">
       <summary class="hint-summary">
         <span class="hint-icon">💡</span>
-        <span>FormRoot directive pattern (click to expand)</span>
+        <span>Part B — [formRoot] pattern (click to expand)</span>
       </summary>
       <div class="hint-content">
-        <pre class="code-block">// Instead of manual (submit)="onSubmit()"
-// Use FormRoot for declarative submit:
-&lt;form [formRoot]="contactForm"
-      (formSubmit)="onFormSubmit()"&gt;
-  ...
-&lt;/form&gt;
+        <pre class="code-block">// Submission logic goes into the 3rd argument of form():
+protected readonly formB = form(this.modelB, (f) =&gt; &#123;
+  required(f.name);
+  // ...validators
+&#125;, &#123;
+  submission: &#123;
+    action: async (field) =&gt; &#123;
+      await new Promise(r =&gt; setTimeout(r, 1500));
+      this.successB.set('Sent!');
+      this.modelB.set(&#123; ...INITIAL &#125;);
+      field().reset();
+      return undefined;
+    &#125;,
+    onInvalid: (field) =&gt; &#123;
+      field().errorSummary()[0]?.fieldTree().focusBoundControl();
+    &#125;
+  &#125;
+&#125;);
 
-// FormRoot automatically:
-// - Prevents default form submit
-// - Calls submit() on your form
-// - Handles validation flow</pre>
+// Template — just this, no onSubmit() method:
+// &lt;form [formRoot]="formB"&gt;</pre>
       </div>
     </details>
   </section>
+
 </div>

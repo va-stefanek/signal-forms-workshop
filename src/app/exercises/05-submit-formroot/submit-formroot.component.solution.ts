@@ -9,6 +9,14 @@ interface ContactFormModel {
   priority: 'low' | 'medium' | 'high';
 }
 
+const INITIAL: ContactFormModel = {
+  name: '',
+  email: '',
+  subject: '',
+  message: '',
+  priority: 'medium'
+};
+
 @Component({
   selector: 'app-submit-formroot',
   standalone: true,
@@ -17,59 +25,60 @@ interface ContactFormModel {
   styleUrl: './submit-formroot.component.solution.scss'
 })
 export class SubmitFormrootComponent {
-  protected readonly formErrors = signal<any[]>([]);
-  protected readonly successMessage = signal<string | null>(null);
 
-  protected readonly contactModel = signal<ContactFormModel>({
-    name: '',
-    email: '',
-    subject: '',
-    message: '',
-    priority: 'medium'
-  });
+  // ── PART A: imperative submit() ──────────────────────────────
+  protected readonly modelA = signal<ContactFormModel>({ ...INITIAL });
 
-  protected readonly contactForm = form(this.contactModel, (f) => {
+  protected readonly formA = form(this.modelA, (f) => {
     required(f.name);
     required(f.email);
     email(f.email);
     required(f.subject);
-    minLength(f.subject, 5);
-    required(f.message);
-    minLength(f.message, 20);
+    minLength(f.message, 10);
   });
 
-  async onSubmit() {
-    this.formErrors.set([]);
-    this.successMessage.set(null);
+  protected readonly successA = signal<string | null>(null);
 
-    await submit(this.contactForm, {
-      action: async (formTree) => {
-        // Simulate API call
+  async onSubmitA() {
+    this.successA.set(null);
+
+    await submit(this.formA, {
+      action: async (field) => {
         await new Promise(resolve => setTimeout(resolve, 1500));
-        this.successMessage.set('Message sent successfully! We will get back to you soon.');
-
-        // Reset model after success
-        this.contactModel.set({
-          name: '',
-          email: '',
-          subject: '',
-          message: '',
-          priority: 'medium'
-        });
-        return null;
+        this.successA.set('Message sent successfully!');
+        this.modelA.set({ ...INITIAL });
+        field().reset();
+        return undefined;
       },
-      onInvalid: (formTree) => {
-        // Collect errors from each field
-        const errors: any[] = [];
-        const fields = ['name', 'email', 'subject', 'message'] as const;
-        for (const fieldName of fields) {
-          const field = formTree[fieldName]();
-          if (field.invalid()) {
-            errors.push(...field.errors());
-          }
-        }
-        this.formErrors.set(errors);
+      onInvalid: (field) => {
+        field().errorSummary()[0]?.fieldTree().focusBoundControl();
       }
     });
   }
+
+  // ── PART B: declarative [formRoot] ───────────────────────────
+  protected readonly modelB = signal<ContactFormModel>({ ...INITIAL });
+
+  protected readonly formB = form(this.modelB, (f) => {
+    required(f.name);
+    required(f.email);
+    email(f.email);
+    required(f.subject);
+    minLength(f.message, 10);
+  }, {
+    submission: {
+      action: async (field) => {
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        this.successB.set('Message sent successfully!');
+        this.modelB.set({ ...INITIAL });
+        field().reset();
+        return undefined;
+      },
+      onInvalid: (field) => {
+        field().errorSummary()[0]?.fieldTree().focusBoundControl();
+      }
+    }
+  });
+
+  protected readonly successB = signal<string | null>(null);
 }
