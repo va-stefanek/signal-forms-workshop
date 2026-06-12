@@ -44,7 +44,7 @@
  */
 
 import { Component, signal, input } from '@angular/core';
-import { form, FormField } from '@angular/forms/signals';
+import { form } from '@angular/forms/signals';
 import { JsonPipe } from '@angular/common';
 
 // ============================================
@@ -82,7 +82,6 @@ interface BookingFormModel {
 @Component({
   selector: 'app-passenger-form',
   standalone: true,
-  imports: [FormField],
   templateUrl: './passenger-form.component.html'
 })
 export class PassengerFormComponent {
@@ -97,7 +96,6 @@ export class PassengerFormComponent {
 @Component({
   selector: 'app-flight-form',
   standalone: true,
-  imports: [FormField],
   templateUrl: './flight-form.component.html'
 })
 export class FlightFormComponent {
@@ -112,7 +110,6 @@ export class FlightFormComponent {
 @Component({
   selector: 'app-payment-form',
   standalone: true,
-  imports: [FormField],
   templateUrl: './payment-form.component.html'
 })
 export class PaymentFormComponent {
